@@ -1,0 +1,39 @@
+ALTER TABLE usr_group_usr DROP CONSTRAINT FK_usr_group_usr_usr_id
+ALTER TABLE usr_group_usr DROP CONSTRAINT FK_usr_group_usr_usr_group_id
+ALTER TABLE USR DROP CONSTRAINT FK_USR_person_id
+ALTER TABLE room_attribute DROP CONSTRAINT FK_room_attribute_room_attribute_type_id
+ALTER TABLE room_attribute DROP CONSTRAINT FK_room_attribute_room_id
+ALTER TABLE ROOM DROP CONSTRAINT FK_ROOM_campus_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_person_group_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_reservation_parent_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_usr_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_db_status_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_room_id
+ALTER TABLE RESERVATION DROP CONSTRAINT FK_RESERVATION_reservation_id
+ALTER TABLE person_group_person DROP CONSTRAINT FK_person_group_person_person_group_id
+ALTER TABLE person_group_person DROP CONSTRAINT FK_person_group_person_person_id
+ALTER TABLE room_manager DROP CONSTRAINT FK_room_manager_usr_group_id
+ALTER TABLE room_manager DROP CONSTRAINT FK_room_manager_room_id
+ALTER TABLE BUILDING DROP CONSTRAINT FK_BUILDING_campus_id
+ALTER TABLE bookable_room DROP CONSTRAINT FK_bookable_room_room_id
+ALTER TABLE usr_group_auth DROP CONSTRAINT FK_usr_group_auth_authority_id
+ALTER TABLE usr_group_auth DROP CONSTRAINT FK_usr_group_auth_usr_group_id
+DROP TABLE usr_group_usr
+DROP TABLE usr_group
+DROP TABLE USR
+DROP TABLE room_attribute_type
+DROP TABLE room_attribute
+DROP TABLE ROOM
+DROP TABLE RESERVATION
+DROP TABLE person_group_person
+DROP TABLE person_group
+DROP TABLE PERSON
+DROP TABLE db_status
+DROP TABLE room_manager
+DROP TABLE CAMPUS
+DROP TABLE BUILDING
+DROP TABLE bookable_room
+DROP TABLE usr_group_auth
+DROP TABLE authority
+DROP SEQUENCE person_seq
+DROP SEQUENCE reservation_seq

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<context:annotation-config />
+
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+
+	<!-- MVC Internationalization -->
+	<!-- <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"> 
+		<beans:property name="defaultLocale" value="en" /> </beans:bean> <beans:bean 
+		id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"> 
+		<beans:property name="paramName" value="language" /> </beans:bean> <beans:bean 
+		class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"> 
+		<beans:property name="interceptors"> <beans:list> <beans:ref bean="localeChangeInterceptor" 
+		/> </beans:list> </beans:property> </beans:bean> -->
+
+	<!-- Registers the messages.properties -->
+	<beans:bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basename" value="messages" />
+	</beans:bean>
+	<!-- <mvc:interceptors> <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" 
+		> <beans:property name="paramName" value="language"></beans:property> </beans:bean> 
+		</mvc:interceptors> -->
+	<!-- @Component annotations for bean definitions -->
+	<context:component-scan base-package="edu.university.roombooking" />
+
+
+	<context:property-placeholder location="classpath:mail.properties" />
+
+
+
+
+	<tx:annotation-driven proxy-target-class="true"></tx:annotation-driven>
+
+	<beans:bean id="jpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+		<beans:property name="database" value="POSTGRESQL"></beans:property>
+		<beans:property name="databasePlatform"
+			value="org.eclipse.persistence.platform.database.PostgreSQLPlatform"></beans:property>
+	</beans:bean>
+
+	<beans:bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="persistenceUnitName" value="Main" />
+		<beans:property name="jpaDialect" ref="jpaDialect" />
+		<beans:property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<!-- <beans:property name="loadTimeWeaver"> <beans:bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" 
+			/> </beans:property> -->
+	</beans:bean>
+
+
+
+	<beans:bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="username" value="postgres" />
+		<beans:property name="password" value="ppp" />
+		<beans:property name="driverClassName" value="org.postgresql.Driver" />
+		<beans:property name="url"
+			value="jdbc:postgresql://localhost:5432/rb?encoding=utf8" />
+	</beans:bean>
+
+
+	<beans:bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+
+	<beans:bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor">
+		<beans:property name="proxyTargetClass" value="true" />
+	</beans:bean>
+
+	<!-- <jee:jndi-lookup jndi-name="jdbc/PostgreSQL" id="dataSource" resource-ref="true" 
+		/> -->
+	<beans:bean id="jpaDialect"
+		class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />
+
+
+
+
+
+
+	<beans:bean class="org.springframework.orm.jpa.JpaTransactionManager"
+		id="transactionManager">
+		<!--<beans:property name="transactionManagerName" value="java:jboss/TransactionManager"></beans:property> -->
+		<!-- <beans:property name="allowCustomIsolationLevels" value="true"></beans:property> -->
+		<beans:property name="entityManagerFactory" ref="entityManagerFactory"></beans:property>
+	</beans:bean>
+
+
+
+
+
+
+	<security:global-method-security
+		pre-post-annotations="enabled" proxy-target-class="true"></security:global-method-security>
+
+
+
+	<security:http pattern="/resources" security="none" />
+
+	<security:http auto-config="true" use-expressions="true">
+
+		<security:csrf />
+
+		<security:remember-me key="45nx84nbd872hfd82hsd823hf"
+			token-validity-seconds="864000" />
+
+		<security:form-login login-page="/login"
+			authentication-failure-url="/login?failure" default-target-url="/" />
+
+		<security:access-denied-handler
+			error-page="/denied" />
+
+		<security:logout invalidate-session="true"
+			logout-success-url="/login?logged-out" logout-url="/logout" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="groupManagement">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
+	<!-- Use a Md5 encoder since the user's passwords are stored as Md5 in the 
+		database -->
+	<beans:bean
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"
+		id="passwordEncoder"></beans:bean>
+
+
+</beans:beans>
